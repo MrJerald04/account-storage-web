@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Context } from '../../context/Context'
 import  api from '../../api/api'
@@ -7,11 +7,12 @@ const Register = (props) => {
     
     const {
       registerFormData,
-      onRegisterChange
+      onRegisterChange,
+      passwordError,
+      setPasswordError,
+      emailError,
+      setEmailError
     } = useContext(Context);
-
-    const [passwordError, setPasswordError] = useState(false);
-    const [emailError, setEmailError] = useState(false);
 
     const { email, password, password2 } = registerFormData;
 

@@ -1,49 +1,61 @@
 import React, { useContext } from 'react'
+import api from '../../api/api';
 
 import { Context } from '../../context/Context';
-const CategoryModal = () => {
+const AccountModal = () => {
     const {
-        categoryFormData,
-        onCategoryChange,
+        accountFormData,
+        onAccountChange,
+        categoryID,
+        setAccountList,
         handleClose
     } = useContext(Context);
     
-    const { title, description } = categoryFormData;
+    const { account_email, account_password, description } = accountFormData;
 
     const onSubmit = e =>{
         e.preventDefault();
-        console.log(categoryFormData)
+        api.handleStoreAccount(categoryID, accountFormData).then(()=>{
+            api.handleRetrieveAccount(setAccountList, categoryID);
+            onClose();
+        });
     }
 
     const onClose = () => {
-        categoryFormData.title = '';
-        categoryFormData.description = '';
+        accountFormData.account_email = '';
+        accountFormData.account_password = '';
+        accountFormData.description = '';
         handleClose();
     }
 
     return (
         <form className="form" onSubmit={e => onSubmit(e)}>
-            <div className="alert alert-danger">
-            Invalid credentials
+            <div className="form-group">
+                <input
+                    type="email"
+                    placeholder="Email"
+                    name="account_email"
+                    value={account_email}
+                    onChange={e => onAccountChange(e)}
+                    required
+                />
             </div>
             <div className="form-group">
-            <input
-                type="text"
-                placeholder="Category Title"
-                name="title"
-                value={title}
-                onChange={e => onCategoryChange(e)}
-                required
-            />
+                <input
+                    type="text"
+                    placeholder="Password"
+                    name="account_password"
+                    value={account_password}
+                    onChange={e => onAccountChange(e)}
+                />
             </div>
             <div className="form-group">
-            <input
-                type="text"
-                placeholder="Desctiption"
-                name="description"
-                value={description}
-                onChange={e => onCategoryChange(e)}
-            />
+                <textarea
+                    placeholder="Description"
+                    name="description"
+                    value={description}
+                    onChange={e => onAccountChange(e)}
+                ></textarea>
             </div>
             <div className="modal-buttons">
                 <input type="submit" className="btn btn-success" value="Login" />
@@ -53,4 +65,4 @@ const CategoryModal = () => {
     )
 }
 
-export default CategoryModal
+export default AccountModal

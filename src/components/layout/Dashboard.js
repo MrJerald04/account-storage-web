@@ -1,37 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { Context } from '../../context/Context';
 import { Link } from 'react-router-dom';
-
 import FormModal from '../modal/ModalContainer';
+import Navbar from './Navbar';
+import api from '../../api/api';
 
 const Dashboard = (props) => {
     const {
-        handleShow
+        handleShow,
     } = useContext(Context);
-
-    const categoryList = [
-        {
-            category_id: '1',
-            title: 'Google',
-            description: 'google'
-        },
-        {
-            category_id: '2',
-            title: 'Facebook',
-            description: 'facebook'
-        },
-        {
-            category_id: '3',
-            title: 'Github',
-            description: 'github'
-        },
-        {
-            category_id: '4',
-            title: 'Yahoo',
-            description: 'yahoo'
-        }
-    ];
+    const [accountCategoryList, setAccountCategoryList] = useState([]);
+    useEffect(()=>{
+        api.handleAccountCategoryList(setAccountCategoryList);
+    }, [setAccountCategoryList]);
+    
     const handleCategory = (id) => {
         console.log(id);
         props.history.push({
@@ -41,6 +24,8 @@ const Dashboard = (props) => {
     }
 
     return(
+        <>
+        <Navbar />
         <section className="container">
             <h1 className="large text-primary">
                 Dashboard
@@ -54,9 +39,9 @@ const Dashboard = (props) => {
             <h2 className="my-2 text-light">Categories</h2>
             <div className="flex-container">
                 {
-                    categoryList.map((item, index)=>{
+                    accountCategoryList.map((item, index)=>{
                         return(
-                            <div key={index} onClick={() => handleCategory(item.category_id)}>{item.title}</div>
+                            <div key={index} onClick={() => handleCategory(item._id)}>{item.title}</div>
                         );
                         
                     })
@@ -68,7 +53,7 @@ const Dashboard = (props) => {
                 title="Add Category"
             />
         </section>
-        
+        </>
     )
     
 }

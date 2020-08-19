@@ -1,18 +1,24 @@
 import React, { useContext } from 'react'
 
 import { Context } from '../../context/Context';
+
+import api from '../../api/api';
 const CategoryModal = () => {
     const {
         categoryFormData,
         onCategoryChange,
-        handleClose
+        handleClose,
+        setAccountCategoryList
     } = useContext(Context);
     
     const { title, description } = categoryFormData;
 
     const onSubmit = e =>{
         e.preventDefault();
-        console.log(categoryFormData)
+        api.handleStoreAccountCategory(categoryFormData).then(()=>{
+            api.handleAccountCategoryList(setAccountCategoryList);
+            onClose();
+        });
     }
 
     const onClose = () => {
@@ -46,7 +52,7 @@ const CategoryModal = () => {
             />
             </div>
             <div className="modal-buttons">
-                <input type="submit" className="btn btn-success" value="Login" />
+                <input type="submit" className="btn btn-success" value="Save" />
                 <button className="btn btn-danger" onClick={onClose}>Close</button>
             </div>
         </form>
